@@ -3,13 +3,20 @@ package org.gaziz.birgram.features.splash.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,7 +38,19 @@ fun SplashScreen(
     val authState by viewModel.authState.collectAsState()
     val context = LocalContext.current
 
-    var isInitializing = false
+    var isInitializing by remember { mutableStateOf(false) }
+    var initializationError by remember { mutableStateOf<String?>(null) }
+
+    fun setTdlibParameters() {
+        if (isInitializing) return
+        isInitializing = true
+        initializationError = null
+        viewModel.setParams("${context.filesDir.absolutePath}/tdlib") { error ->
+            isInitializing = false
+            initializationError = error
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.initApplication(onNonReady)
     }
@@ -39,18 +58,18 @@ fun SplashScreen(
         if(authState == null){
             viewModel.loadState()
         } else {
-            if (authState is AuthState.WaitParams && !isInitializing) {
-                isInitializing = true
-                viewModel.setParams(
-                    "${context.filesDir.absolutePath}/tdlib",
-                ) { isInitializing = false }
+            if (authState is AuthState.WaitParams) {
+                setTdlibParameters()
             }
             if (authState is AuthState.Closed && !isInitializing) {
                 isInitializing = true
                 viewModel.initApplication(onNonReady,true).let {
                     viewModel.setParams(
                         "${context.filesDir.absolutePath}/tdlib"
-                    ) { isInitializing = false }
+                    ) { error ->
+                        isInitializing = false
+                        initializationError = error
+                    }
                 }
             }
 
@@ -72,13 +91,35 @@ fun SplashScreen(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
-    ){
-        Image(
-            painterResource(R.drawable.app_launcher),
-            contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .size((windowInfo.containerSize.width/6).dp)
-        )
+    ) {
+        val error = initializationError
+        if (error == null) {
+            Image(
+                painterResource(R.drawable.app_launcher),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size((windowInfo.containerSize.width / 6).dp)
+            )
+        } else {
+            Column(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "MaterialGram couldn’t start",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = error,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
     }
 }
