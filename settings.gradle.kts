@@ -23,7 +23,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "BirGram"
+rootProject.name = "MaterialGram"
 include(":app")
 include(":core:telegram")
 include(":core:tdlib")

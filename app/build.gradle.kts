@@ -17,7 +17,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "org.gaziz.birgram"
+        applicationId = "com.materialgram.android"
         minSdk = 28
         targetSdk = 36
         versionCode = 4

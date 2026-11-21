@@ -6,12 +6,18 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+val localPropertiesFile = rootProject.file("local.properties")
 val properties = Properties().apply {
-    load(rootProject.file("local.properties").inputStream())
+    if (localPropertiesFile.isFile) {
+        localPropertiesFile.inputStream().use(::load)
+    }
 }
 
-val apiId = properties.getProperty("api_id") ?: ""
-val apiHash = properties.getProperty("api_hash") ?: ""
+val apiId = properties.getProperty("api_id")?.trim()?.toIntOrNull() ?: 0
+val apiHash = properties.getProperty("api_hash")?.trim().orEmpty()
+val escapedApiHash = apiHash
+    .replace("\\", "\\\\")
+    .replace("\"", "\\\"")
 
 android {
     namespace = "org.gaziz.birgram.core.telegram"
@@ -22,8 +28,8 @@ android {
         buildConfig = true
     }
     defaultConfig {
-        buildConfigField("String", "API_ID", apiId)
-        buildConfigField("String", "API_HASH", apiHash)
+        buildConfigField("int", "API_ID", apiId.toString())
+        buildConfigField("String", "API_HASH", "\"$escapedApiHash\"")
         minSdk = 28
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

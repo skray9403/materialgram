@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-    <string name="app_name">BirGram</string>
+    <string name="app_name">MaterialGram</string>
     <string-array name="login_cnt">
         <item>A fast, minimalist, and secure Telegram client.</item>
         <item>Getting start!</item>

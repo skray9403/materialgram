@@ -53,8 +53,12 @@ class AuthServiceImpl @Inject constructor(
         appVersion: String,
         onError: (String) -> Unit
     ) {
+        if (BuildConfig.API_ID <= 0 || BuildConfig.API_HASH.isBlank()) {
+            onError("Telegram API credentials are missing. Add api_id and api_hash to local.properties.")
+            return
+        }
         val parameters = TdApi.SetTdlibParameters().apply {
-            apiId = BuildConfig.API_ID.toInt()
+            apiId = BuildConfig.API_ID
             apiHash = BuildConfig.API_HASH
             filesDirectory = databasePath + "_files"
             databaseDirectory = databasePath
