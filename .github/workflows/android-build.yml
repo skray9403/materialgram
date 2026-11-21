@@ -32,7 +32,7 @@ jobs:
         uses: android-actions/setup-android@v4
 
       - name: Install Android 17 SDK platform
-        run: sdkmanager --channel=3 "platforms;android-37"
+        run: sdkmanager --channel=3 "platforms;android-37.0"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6
