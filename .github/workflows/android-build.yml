@@ -39,3 +39,11 @@ jobs:
 
       - name: Assemble debug APK
         run: ./gradlew --no-daemon :app:assembleDebug
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: materialgram-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 7
