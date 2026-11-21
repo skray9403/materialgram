@@ -21,7 +21,7 @@ class UserPreferences @Inject constructor(
     private val dataStore = context.dataStore
 
     override val isDark: Flow<Boolean> = dataStore.data.map {
-        it[IS_DARK] ?: true
+        it[IS_DARK] ?: false
     }
 
     override suspend fun switchIsDark(isDark: Boolean) {

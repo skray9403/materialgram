@@ -30,7 +30,7 @@ class ChatListViewModel @Inject constructor(
     val isDark = userPreferencesRepository.isDark.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
-        true
+        false
     )
     fun switchIsDark(data: Boolean){
         viewModelScope.launch {

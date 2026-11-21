@@ -85,7 +85,8 @@ class GetChatList @Inject constructor(
                             userService.users.value[chatType.userId]?.status is UserStatus.Online &&
                             userService.users.value[chatType.userId]?.type is UserType.Regular
                         ),
-                        messageSender = sender
+                        messageSender = sender,
+                        isGroup = chatType is ChatType.BasicGroup || chatType is ChatType.SuperGroup
                     )
                 }
         }

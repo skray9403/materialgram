@@ -15,6 +15,6 @@ class SettingsViewModel @Inject constructor(
     val isDarkTheme = userPreferencesRepository.isDark.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
-        true
+        false
     )
 }

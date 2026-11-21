@@ -18,5 +18,6 @@ data class ChatListItem(
     val avatar: AvatarUiState,
     val isDraftMsg: Boolean,
     val isOnline: Boolean,
-    val messageSender: String?
+    val messageSender: String?,
+    val isGroup: Boolean = false
 )

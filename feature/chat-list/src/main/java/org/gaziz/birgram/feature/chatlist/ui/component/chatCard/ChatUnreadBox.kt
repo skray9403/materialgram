@@ -38,14 +38,14 @@ fun ChatUnreadBadge(
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.onBackground.copy(0.35f)),
+                        .background(MaterialTheme.colorScheme.onSurface),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = (unreadBadge.mentionCount+unreadBadge.unreadCount).toString(),
                         fontSize = unreadBadge.fontSize,
                         lineHeight = unreadBadge.fontSize,
-                        color = MaterialTheme.colorScheme.onBackground,
+                        color = MaterialTheme.colorScheme.surface,
                         modifier = Modifier.padding(
                             horizontal = 5.dp,
                             vertical = 3.dp
