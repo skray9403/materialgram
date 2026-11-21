@@ -1,12 +1,11 @@
 package org.gaziz.birgram.feature.chatlist.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
@@ -68,18 +67,20 @@ fun MainScreenTopBar(
                 )
             }
 
-            AnimatedVisibility(
-                visible = titleCollapsed,
+            Crossfade(
+                targetState = titleCollapsed,
                 modifier = Modifier.align(Alignment.Center),
-                enter = fadeIn(tween(180)) + slideInVertically(tween(180)) { it / 4 },
-                exit = fadeOut(tween(100)) + slideOutVertically(tween(140)) { it / 4 }
-            ) {
-                Text(
-                    text = "Inbox",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                animationSpec = tween(180),
+                label = "compactInboxTitle"
+            ) { collapsed ->
+                if (collapsed) {
+                    Text(
+                        text = "Inbox",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
 
             IconButton(
